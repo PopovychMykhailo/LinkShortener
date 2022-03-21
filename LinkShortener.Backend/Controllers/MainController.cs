@@ -27,7 +27,7 @@ namespace LinkShortener.Backend.Controllers
         }
 
 
-        [HttpPost("Create")]        // Create
+        [HttpPost("Create")]
         public IActionResult Create(LinkItemModel model)
         {
             // Validation
@@ -41,20 +41,20 @@ namespace LinkShortener.Backend.Controllers
             return RedirectToLinkItemById(newEntity.Id);
         }
 
-        [HttpGet("AllLinks")]       // Read all LinkItems
+        [HttpGet("AllLinks")]
         public JsonResult AllLinks()
         {
             return new JsonResult(LinkItems.GetAll());
         }
 
-        [HttpGet("Link/{id}")]      // Read one LinkItem
+        [HttpGet("Link/{id}")]
         public JsonResult Link(Guid id)
         {
 
             return new JsonResult(LinkItems.GetById(id));
         }
 
-        [HttpPut("Update/{id}")]    // Update
+        [HttpPut("Update/{id}")]
         public IActionResult Put(Guid id, LinkItemModel model)
         {
             // Existence check
@@ -68,7 +68,7 @@ namespace LinkShortener.Backend.Controllers
             return RedirectToLinkItemById(id);
         }
 
-        [HttpDelete("AllDelete")]   // Delete all
+        [HttpDelete("AllDelete")]
         public IActionResult AllDelete()
         {
             var list = LinkItems.GetAll();
@@ -78,7 +78,7 @@ namespace LinkShortener.Backend.Controllers
             return Ok();
         }
 
-        [HttpDelete("Delete/{id}")] // Delete
+        [HttpDelete("Delete/{id}")]
         public IActionResult Delete(Guid id)
         {
             var toDelete = LinkItems.GetById(id);
