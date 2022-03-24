@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkShortener.Resource.Services.Interfaces
+namespace LinkShortener.Resource.Models
 {
-    public interface IShortLinkGenerator
+    public class CreateLinkItemModel
     {
-        public string Generate();
+        public string LongLink { get; set; }
     }
 }

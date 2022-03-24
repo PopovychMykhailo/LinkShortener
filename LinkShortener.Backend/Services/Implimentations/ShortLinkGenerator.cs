@@ -1,7 +1,7 @@
 ﻿using System;
-using LinkShortener.Backend.Services.Interfaces;
+using LinkShortener.Resource.Services.Interfaces;
 
-namespace LinkShortener.Backend.Services.Implimentations
+namespace LinkShortener.Resource.Services.Implimentations
 {
     public class ShortLinkGenerator : IShortLinkGenerator
     {

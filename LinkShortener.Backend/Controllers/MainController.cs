@@ -1,14 +1,16 @@
 ﻿using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using LinkShortener.Backend.Domain.Entities.Implimentations;
-using LinkShortener.Backend.Domain.Repositories.Interfaces;
-using LinkShortener.Backend.Services.Interfaces;
-using LinkShortener.Backend.Services;
-using LinkShortener.Backend.Models;
-using System.Net;
+using LinkShortener.Resource.Domain.Entities.Implimentations;
+using LinkShortener.Resource.Domain.Repositories.Interfaces;
+using LinkShortener.Resource.Services.Interfaces;
+using LinkShortener.Resource.Services;
+using LinkShortener.Resource.Models;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using LinkShortener.Resource.Database;
 
-namespace LinkShortener.Backend.Controllers
+namespace LinkShortener.Resource.Controllers
 {
 
     [Route("api/[controller]")]
@@ -16,93 +18,104 @@ namespace LinkShortener.Backend.Controllers
     public class MainController : ControllerBase
     {
         private IShortLinkGenerator Generator { get; set; }
-        private IBaseRepository<LinkItem> LinkItems { get; set; }
+        //private IBaseRepository<LinkItem> LinkItems { get; set; }
+        private AppDbContext Context;
+
+        private Guid UserId => Guid.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
 
 
-        public MainController(IShortLinkGenerator generator, IBaseRepository<LinkItem> links)
+
+        public MainController(IShortLinkGenerator generator, AppDbContext context)
         {
             Generator = generator;
-            LinkItems = links;
+            Context = context;
         }
 
 
-        [HttpPost("Create")]
-        public IActionResult Create(LinkItemModel model)
+        [HttpPost(nameof(Create))]
+        [Authorize]
+        public IActionResult Create(CreateLinkItemModel model)
         {
             // Validation
             if (model.LongLink == null)
-                return BadRequest();
+                return BadRequest(new { error_text = "LongLink cannot be empty!" });
 
             // Add to DB
-            LinkItem newEntity = Mapping(model, Guid.NewGuid());
-            LinkItems.Create(newEntity);
+            LinkItem newEntity = new(UserId, model.LongLink);
+            Context.Links.Add(newEntity);
+            Context.SaveChanges();
 
             return RedirectToLinkItemById(newEntity.Id);
         }
 
-        [HttpGet("AllLinks")]
-        public JsonResult AllLinks()
+        [HttpGet(nameof(AllLinks))]
+        [Authorize]
+        public IActionResult AllLinks()
         {
-            return new JsonResult(LinkItems.GetAll());
+            var list = Context.Links.Where(l => l.UserId == UserId);
+            return new JsonResult(list);
         }
 
-        [HttpGet("Link/{id}")]
-        public JsonResult Link(Guid id)
-        {
-
-            return new JsonResult(LinkItems.GetById(id));
-        }
-
-        [HttpPut("Update/{id}")]
-        public IActionResult Put(Guid id, LinkItemModel model)
+        [HttpGet(nameof(Link) + "/{id}")]
+        [Authorize]
+        public IActionResult Link(Guid id)
         {
             // Existence check
-            var toUpdate = LinkItems.GetById(id);
-            if (toUpdate == null)
-                return BadRequest("Wrong ID of the link");
+            var link = Context.Links.Where(l => l.UserId == UserId && l.Id == id);
+            if (link == null)
+                return NotFound(new { error_text = "Wrong ID of the link" });
 
+            return new JsonResult(link);
+        }
+
+        [HttpPut(nameof(Update) + "/{id}")]
+        [Authorize]
+        public IActionResult Update(Guid id, LinkItemModel model)
+        {
+            // Existence check
+            var toUpdate = Context.Links.FirstOrDefault(l => l.UserId == UserId && l.Id == id);
+            if (toUpdate == null)
+                return NotFound(new { error_text = "Wrong ID of the link" });
+
+            // Change the LinkItem
             toUpdate.LongLink = model.LongLink;
-            LinkItems.Update(toUpdate);
+            Context.Links.Update(toUpdate);
+            Context.SaveChanges();
 
             return RedirectToLinkItemById(id);
         }
 
-        [HttpDelete("AllDelete")]
-        public IActionResult AllDelete()
-        {
-            var list = LinkItems.GetAll();
-            foreach (var item in list)
-                LinkItems.Delete(item.Id);
-
-            return Ok();
-        }
-
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete(nameof(Delete) + "/{id}")]
+        [Authorize]
         public IActionResult Delete(Guid id)
         {
-            var toDelete = LinkItems.GetById(id);
+            // Existence check
+            var toDelete = Context.Links.FirstOrDefault(l => l.UserId == UserId && l.Id == id);
             if (toDelete == null)
-                return NotFound();
+                return NotFound(new { error_text = "Wrong ID of the link" });
 
-            LinkItems.Delete(id);
-            return Ok();
+            // Remove
+            Context.Links.Remove(toDelete);
+            Context.SaveChanges();
+
+            return Ok(new { message_text = "The link successfully deleted!" });
         }
 
-
-
-        private LinkItem Mapping(LinkItemModel model, Guid userId)
+        [HttpDelete(nameof(AllDelete))]
+        [Authorize]
+        public IActionResult AllDelete()
         {
-            return new LinkItem()
-            {
-#warning Брати UserId з токену користувача
-                UserId = userId,
-                Id = Guid.NewGuid(),
-                LongLink = model.LongLink,
-                ShortLink = Guid.NewGuid().ToString(),
-                CreatedDate = DateTime.Now,
-            };
+            var list = Context.Links.Where(l => l.UserId == UserId);
+            foreach (var item in list)
+                Context.Links.Remove(item);
+            Context.SaveChanges();
+
+            return Ok(new { message_text = "All links successfully deleted!" });
         }
+
+
+
 
         private RedirectToActionResult RedirectToLinkItemById(Guid id)
         {

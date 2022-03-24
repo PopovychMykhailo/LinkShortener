@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkShortener.Backend.Services
+namespace LinkShortener.Resource.Services
 {
     public static class Extentions
     {

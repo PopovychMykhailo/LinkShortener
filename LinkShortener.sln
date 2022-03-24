@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkShortener.Backend", "LinkShortener.Backend\LinkShortener.Backend.csproj", "{CC0CC60F-63D3-46C1-99F8-A2BD9050613F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkShortener.Resource", "LinkShortener.Backend\LinkShortener.Resource.csproj", "{CC0CC60F-63D3-46C1-99F8-A2BD9050613F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkShortener.Auth", "LinkShortener.Auth\LinkShortener.Auth.csproj", "{026C6B9F-B910-4444-859B-67307A94D42C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkShortener.Auth.Common", "LinkShortener.Auth.Common\LinkShortener.Auth.Common.csproj", "{D675F04E-9AC0-4158-99FF-022BCB6828BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{CC0CC60F-63D3-46C1-99F8-A2BD9050613F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC0CC60F-63D3-46C1-99F8-A2BD9050613F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC0CC60F-63D3-46C1-99F8-A2BD9050613F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026C6B9F-B910-4444-859B-67307A94D42C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026C6B9F-B910-4444-859B-67307A94D42C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026C6B9F-B910-4444-859B-67307A94D42C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026C6B9F-B910-4444-859B-67307A94D42C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D675F04E-9AC0-4158-99FF-022BCB6828BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D675F04E-9AC0-4158-99FF-022BCB6828BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D675F04E-9AC0-4158-99FF-022BCB6828BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D675F04E-9AC0-4158-99FF-022BCB6828BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

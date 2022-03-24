@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LinkShortener.Backend.Database;
-using LinkShortener.Backend.Domain.Entities.Interfaces;
-using LinkShortener.Backend.Domain.Repositories.Interfaces;
+using LinkShortener.Resource.Database;
+using LinkShortener.Resource.Domain.Entities.Interfaces;
+using LinkShortener.Resource.Domain.Repositories.Interfaces;
 
-namespace LinkShortener.Backend.Domain.Repositories.Implimentations
+namespace LinkShortener.Resource.Domain.Repositories.Implimentations
 {
     public class BaseRepository<TDbModel> : IBaseRepository<TDbModel> where TDbModel : EntityBase
     {
@@ -21,7 +21,7 @@ namespace LinkShortener.Backend.Domain.Repositories.Implimentations
 
         public void Create(TDbModel model)
         {
-            _Context.Set<TDbModel>().Add(model);    // ? Навіщо використовувати і чи працює без нього Set<TDbModel>()
+            _Context.Set<TDbModel>().Add(model);
             _Context.SaveChanges();
         }
 

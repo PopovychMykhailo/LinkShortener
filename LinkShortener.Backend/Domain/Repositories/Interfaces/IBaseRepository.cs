@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LinkShortener.Backend.Domain.Entities.Interfaces;
+using LinkShortener.Resource.Domain.Entities.Interfaces;
 
-namespace LinkShortener.Backend.Domain.Repositories.Interfaces
+namespace LinkShortener.Resource.Domain.Repositories.Interfaces
 {
     public interface IBaseRepository<TDbModel> where TDbModel : EntityBase
     {

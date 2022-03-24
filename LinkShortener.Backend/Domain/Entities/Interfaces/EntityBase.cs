@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LinkShortener.Backend.Domain.Entities.Interfaces
+namespace LinkShortener.Resource.Domain.Entities.Interfaces
 {
     public class EntityBase
     {
