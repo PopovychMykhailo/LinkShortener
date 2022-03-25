@@ -6,11 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using LinkShortener.Resource.Database;
-using LinkShortener.Resource.Domain.Entities.Implimentations;
-using LinkShortener.Resource.Domain.Repositories.Interfaces;
-using LinkShortener.Resource.Domain.Repositories.Implimentations;
-using LinkShortener.Resource.Services.Implimentations;
-using LinkShortener.Resource.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using LinkShortener.Auth.Common;
@@ -56,9 +51,6 @@ namespace LinkShortener.Resource
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
-
-            services.AddSingleton<IShortLinkGenerator, ShortLinkGenerator>();
-            services.AddTransient<IBaseRepository<LinkItem>, BaseRepository<LinkItem>>();
 
             services.AddCors(options =>
             {

@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using LinkShortener.Resource.Domain.Entities.Implimentations;
-using LinkShortener.Resource.Domain.Repositories.Interfaces;
-using LinkShortener.Resource.Services.Interfaces;
 using LinkShortener.Resource.Services;
 using LinkShortener.Resource.Models;
 using System.Linq;
@@ -17,8 +15,6 @@ namespace LinkShortener.Resource.Controllers
     [ApiController]
     public class MainController : ControllerBase
     {
-        private IShortLinkGenerator Generator { get; set; }
-        //private IBaseRepository<LinkItem> LinkItems { get; set; }
         private AppDbContext Context;
 
         private Guid UserId => Guid.Parse(User.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -26,9 +22,8 @@ namespace LinkShortener.Resource.Controllers
 
 
 
-        public MainController(IShortLinkGenerator generator, AppDbContext context)
+        public MainController(AppDbContext context)
         {
-            Generator = generator;
             Context = context;
         }
 

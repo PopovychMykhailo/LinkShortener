@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using LinkShortener.Resource.Domain.Entities.Interfaces;
+using LinkShortener.Resource.Services;
 
 namespace LinkShortener.Resource.Domain.Entities.Implimentations
 {
@@ -17,7 +18,7 @@ namespace LinkShortener.Resource.Domain.Entities.Implimentations
         public LinkItem(Guid userId, string longLink)
         {
             UserId = userId;
-            ShortLink = Guid.NewGuid().ToString();
+            ShortLink = ShortLinkGenerator.Generate();
             LongLink = longLink;
             CreatedDate = DateTime.Now;
         }
